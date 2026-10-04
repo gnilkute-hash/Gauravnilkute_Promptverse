@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blind Spot — The AI Thinking Companion | Epistemic Mirror</title>
+  <meta name="description" content="An AI-powered thinking companion that surfaces hidden assumptions, detects cognitive biases, and asks Socratic questions—without ever making the decision for you.">
+  <meta name="theme-color" content="#090D16">
+
+  <!-- OpenGraph / Meta -->
+  <meta property="og:title" content="Blind Spot — The AI Thinking Companion">
+  <meta property="og:description" content="Think deeper. Decide better. Your call. Socratic cognitive debiasing engine.">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts: Plus Jakarta Sans, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow glow-top-left" aria-hidden="true"></div>
+  <div class="ambient-glow glow-center-right" aria-hidden="true"></div>
+
+  <!-- Navigation / Top App Bar -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="brand-icon-wrapper" aria-hidden="true">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-dasharray="4 2" />
+            <circle cx="12" cy="12" r="4" fill="currentColor" />
+            <line x1="12" y1="2" x2="12" y2="6" />
+            <line x1="12" y1="18" x2="12" y2="22" />
+            <line x1="2" y1="12" x2="6" y2="12" />
+            <line x1="18" y1="12" x2="22" y2="12" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">BLIND SPOT</h1>
+          <span class="brand-subtitle">AI Thinking Companion</span>
+        </div>
+      </div>
+
+      <!-- Main Navigation Links -->
+      <nav class="main-nav" aria-label="Main Navigation">
+        <button type="button" class="nav-btn active" data-view="workbench">Workbench</button>
+        <button type="button" class="nav-btn" data-view="analysis">Live Analysis</button>
+        <button type="button" class="nav-btn" data-view="dashboard">Dashboard</button>
+        <button type="button" class="nav-btn" data-view="journal">Journal</button>
+        <button type="button" class="nav-btn" data-view="methodology">Methodology</button>
+        <button type="button" class="nav-btn" data-view="privacy">Privacy</button>
+        <button type="button" class="nav-btn" data-view="auth" id="navAuthBtn">Sign In</button>
+      </nav>
+
+      <!-- Autonomy Badge & Action Group -->
+      <div class="header-actions">
+        <div class="autonomy-pill" title="Blind Spot is strictly non-directive. It never prescribes what you should decide.">
+          <span class="pill-dot"></span>
+          <span class="pill-text">Autonomy-by-Design Active</span>
+        </div>
+
+        <div class="autonomy-pill supabase-pill" title="Connected to Supabase PostgreSQL: https://yfwcnncthbjcwekkoxwe.supabase.co">
+          <span class="pill-dot"></span>
+          <span class="pill-text">Supabase Cloud Live</span>
+        </div>
+
+        <button id="apiSettingsBtn" class="btn-ghost" title="Configure AI Model & API Key">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>
+          </svg>
+          <span id="activeModelBadge">Model: Dynamic Socratic</span>
+        </button>
+
+        <button id="premortemBtn" class="btn-ghost" title="Open Guided Pre-mortem analysis">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+          Pre-Mortem
+        </button>
+
+        <button id="historyBtn" class="btn-ghost" title="View Saved Decisions">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span id="historyCountBadge" class="badge-count">0</span>
+        </button>
+
+        <button id="privacyBtn" class="btn-ghost" title="Data Privacy & Sovereignty Vault">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Privacy & Sovereignty
+        </button>
+
+        <button id="headerAuthBtn" class="btn-ghost" title="Authentication & Account">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span id="headerAuthText">Sign In</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== VIEW 1: WORKBENCH ==================== -->
+  <div id="workbenchView" class="page-view active">
+    <!-- Autonomy Charter Hero Banner -->
+    <section class="autonomy-banner">
+    <div class="banner-content">
+      <div class="banner-tag">NON-PRESCRIPTIVE INTELLECTUAL COMPANION</div>
+      <h2 class="banner-heading">Think deeper. Decide better. <span class="highlight-text">Your call.</span></h2>
+      <p class="banner-description">
+        Blind Spot acts as an epistemic mirror. We surface unexamined assumptions, detect cognitive blind spots, and ask the hard Socratic questions you need to hear—<strong>without ever telling you what to do</strong>.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Decision Workbench Grid -->
+  <main class="workbench-layout">
+
+    <!-- LEFT COLUMN: Decision Input & Configuration (40%) -->
+    <section class="input-panel glass-card" aria-labelledby="inputSectionTitle">
+      <div class="panel-header">
+        <div class="panel-title-wrap">
+          <span class="step-num">01</span>
+          <h2 id="inputSectionTitle" class="panel-title">Frame Your Decision</h2>
+        </div>
+        <div class="presets-dropdown-wrap">
+          <label for="samplePresets" class="sr-only">Load Sample Decision</label>
+          <select id="samplePresets" class="preset-select" aria-label="Load real-world decision template">
+            <option value="" disabled selected>⚡ Load Real Decision Scenario...</option>
+            <option value="saas_startup">Quit Corporate VP to Bootstrap AI SaaS</option>
+            <option value="career_relocation">Accept SF Tech Lead vs Remote Stability</option>
+            <option value="college_dropout">Drop Out of University to Pursue YC Startup</option>
+            <option value="pricing_pivot">Pivot Enterprise Pricing from Seat-Based to Usage</option>
+          </select>
+        </div>
+      </div>
+
+      <form id="decisionForm" class="decision-form" onsubmit="return false;">
+        <!-- Decision Title Field -->
+        <div class="form-group">
+          <label for="decisionTitle" class="form-label">
+            The Decision Statement
+            <span class="required-star">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="decisionTitle" 
+            name="decisionTitle"
+            class="form-input" 
+            placeholder="e.g., Should I quit my VP role to bootstrap an AI micro-SaaS?"
+            maxlength="140"
+            required
+          >
+          <div class="input-hint">Clear, specific question or pending choice (140 chars max)</div>
+        </div>
+
+        <!-- Decision Context & Reasoning Field -->
+        <div class="form-group">
+          <label for="decisionContext" class="form-label">
+            Context, Reasoning & Stated Evidence
+            <span class="required-star">*</span>
+          </label>
+          <textarea 
+            id="decisionContext" 
+            name="decisionContext"
+            class="form-textarea" 
+            rows="6"
+            placeholder="Describe your current thinking: Why are you leaning this way? What evidence or data points do you have? What are you worried about? Who else is affected?"
+            required
+          ></textarea>
+          <div class="textarea-footer">
+            <span id="wordCount">0 words</span>
+            <span class="hint-pill">Tip: Include concrete numbers & reasons</span>
+          </div>
+        </div>
+
+        <!-- Dual Slider & Horizon Controls -->
+        <div class="controls-split-row">
+          <!-- Confidence Level -->
+          <div class="control-box">
+            <div class="slider-header">
+              <label for="confidenceSlider" class="form-label">Initial Conviction</label>
+              <span id="confidenceValue" class="slider-value-display">8 / 10</span>
+            </div>
+            <input 
+              type="range" 
+              id="confidenceSlider" 
+              min="1" 
+              max="10" 
+              value="8" 
+              class="range-slider"
+            >
+            <div class="slider-ticks">
+              <span>1 (Doubt)</span>
+              <span>5 (Neutral)</span>
+              <span>10 (Certain)</span>
+            </div>
+          </div>
+
+          <!-- Time Horizon -->
+          <div class="control-box">
+            <label class="form-label">Impact Horizon</label>
+            <div class="horizon-pills" role="radiogroup" aria-label="Time horizon">
+              <button type="button" class="horizon-pill" data-horizon="3-months">3 Mos</button>
+              <button type="button" class="horizon-pill active" data-horizon="1-year">1 Year</button>
+              <button type="button" class="horizon-pill" data-horizon="5-years">5+ Yrs</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="form-actions">
+          <button type="submit" id="analyzeBtn" class="btn-primary">
+            <span class="btn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <span class="btn-text">Examine Blind Spots</span>
+          </button>
+
+          <button type="button" id="quickMissingBtn" class="btn-secondary" title="Surface the single biggest blind spot instantly">
+            <svg class="icon-sm text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            What Am I Missing?
+          </button>
+        </div>
+
+        <!-- Ethical & Socratic Disclaimer Footnote -->
+        <div class="panel-footnote">
+          <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span>Blind Spot does not store unencrypted decision text. Not financial, medical, or legal advice.</span>
+        </div>
+      </form>
+    </section>
+
+
+    <!-- RIGHT COLUMN: Cognitive Mirror & Socratic Explorer (60%) -->
+    <section class="results-panel" aria-labelledby="analysisResultsTitle">
+      
+      <!-- Welcome Empty State (Visible before analysis) -->
+      <div id="emptyState" class="empty-state-card glass-card">
+        <div class="empty-icon-halo">
+          <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </div>
+        <h3 class="empty-title">Ready to Stress-Test Your Thinking</h3>
+        <p class="empty-desc">
+          Enter an important career, founder, or personal decision on the left or select a sample scenario above. Blind Spot will decompose your reasoning, calculate cognitive vulnerability metrics, and reveal hidden premises.
+        </p>
+        <div class="empty-feature-pills">
+          <span class="feature-tag">🎯 Blind Spot Score (1–10)</span>
+          <span class="feature-tag">📊 Conviction vs. Evidence Meter</span>
+          <span class="feature-tag">🕸️ Assumption Dependency Graph</span>
+          <span class="feature-tag">👥 Multi-Stakeholder Perspectives</span>
+        </div>
+      </div>
+
+      <!-- Loading State (Progressive Reasoning Pulse) -->
+      <div id="loadingState" class="loading-state-card glass-card hidden">
+        <div class="reasoning-pulsar">
+          <div class="pulse-ring"></div>
+          <div class="pulse-ring delay-1"></div>
+          <div class="pulse-core">
+            <svg class="spinner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+            </svg>
+          </div>
+        </div>
+        <h3 id="loadingStatusText" class="loading-status-text">Parsing stated premises...</h3>
+        <p class="loading-subtext">Evaluating cognitive bias patterns & measuring confidence-to-evidence ratio...</p>
+      </div>
+
+      <!-- Active Analysis Dashboard (Populated dynamically) -->
+      <div id="analysisDashboard" class="analysis-dashboard hidden">
+
+        <!-- Top Overview Header: Title & Assessment -->
+        <div class="analysis-hero-card glass-card">
+          <div class="hero-top-meta">
+            <span class="meta-badge-horizon" id="displayHorizon">Horizon: 1-Year</span>
+            <span class="meta-badge-risk" id="displayRiskBadge">Moderate Risk</span>
+          </div>
+          <h2 id="analysisResultsTitle" class="analysis-decision-title">Should I quit my VP role to bootstrap an AI micro-SaaS?</h2>
+          <p id="analysisSummary" class="analysis-summary-text">
+            High operational conviction paired with substantial early go-to-market assumptions.
+          </p>
+        </div>
+
+        <!-- Visual Gauges Split Row (Score Gauge + Confidence/Evidence Meter) -->
+        <div class="gauges-grid">
+          
+          <!-- Gauge 1: Blind Spot Score Gauge (Speedometer) -->
+          <div class="gauge-card glass-card">
+            <div class="gauge-card-header">
+              <h3 class="gauge-title">BLIND SPOT RISK SCORE</h3>
+              <span class="tooltip-trigger" title="Calculated from cognitive bias count, confidence-to-evidence gap, and unverified critical assumptions.">ⓘ</span>
+            </div>
+            
+            <div class="speedometer-wrapper">
+              <svg class="speedometer-svg" viewBox="0 0 200 120" role="img" aria-label="Blind spot score gauge">
+                <!-- Gauge Background Arc -->
+                <path d="M 20 105 A 80 80 0 0 1 180 105" class="gauge-bg-arc" fill="none" stroke-width="16" />
+                <!-- Dynamic Colored Indicator Arc -->
+                <path id="scoreGaugeArc" d="M 20 105 A 80 80 0 0 1 180 105" class="gauge-active-arc" fill="none" stroke-width="16" stroke-dasharray="251.32" stroke-dashoffset="100" />
+              </svg>
+              <div class="speedometer-center-readout">
+                <span id="scoreValueBig" class="score-number">7</span>
+                <span class="score-denom">/ 10</span>
+                <span id="scoreRiskLabel" class="score-risk-tag tag-amber">MODERATE RISK</span>
+              </div>
+            </div>
+
+            <div class="gauge-breakdown" id="biasChipsRow">
+              <!-- Dynamically populated bias tags -->
+            </div>
+          </div>
+
+          <!-- Gauge 2: Confidence vs. Supporting Evidence Comparative Meter -->
+          <div class="gauge-card glass-card">
+            <div class="gauge-card-header">
+              <h3 class="gauge-title">CONVICTION VS. EVIDENCE</h3>
+              <span class="tooltip-trigger" title="Compares expressed certainty against verifiable factual claims, numbers, and tested pilots.">ⓘ</span>
+            </div>
+
+            <div class="meter-bars-container">
+              <!-- Left Bar: Stated Conviction -->
+              <div class="meter-column">
+                <div class="meter-bar-track">
+                  <div id="meterConfidenceBar" class="meter-bar-fill bar-violet" style="height: 80%;">
+                    <span id="meterConfidenceText" class="meter-bar-label">8/10</span>
+                  </div>
+                </div>
+                <span class="meter-col-title">Expressed Conviction</span>
+              </div>
+
+              <!-- Right Bar: Supporting Evidence -->
+              <div class="meter-column">
+                <div class="meter-bar-track">
+                  <div id="meterEvidenceBar" class="meter-bar-fill bar-cyan" style="height: 35%;">
+                    <span id="meterEvidenceText" class="meter-bar-label">3.5/10</span>
+                  </div>
+                </div>
+                <span class="meter-col-title">Factual Evidence</span>
+              </div>
+            </div>
+
+            <div id="mismatchAlertBox" class="mismatch-notice warning-mismatch">
+              <div class="mismatch-icon">⚠️</div>
+              <div class="mismatch-text" id="mismatchAnalysisText">
+                <strong>Overconfidence Mismatch:</strong> Your conviction rating is significantly higher than the empirical data provided.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Assumption Map & Criticality Inspector -->
+        <div class="assumption-map-section glass-card">
+          <div class="section-title-bar">
+            <div>
+              <h3 class="section-title">Assumption Dependency Map</h3>
+              <p class="section-subtitle">Categorized by certainty. Click any node to review its falsification test.</p>
+            </div>
+            <div class="legend-pills">
+              <span class="legend-pill pill-stated"><span class="dot-stated"></span> Stated</span>
+              <span class="legend-pill pill-inferred"><span class="dot-inferred"></span> Inferred</span>
+              <span class="legend-pill pill-critical"><span class="dot-critical"></span> Critical Failure Node</span>
+            </div>
+          </div>
+
+          <!-- Node Network Grid -->
+          <div id="assumptionNodesGrid" class="assumption-nodes-grid">
+            <!-- Dynamic Assumption Cards injected here -->
+          </div>
+
+          <!-- Selected Assumption Detail Drawer / Accordion -->
+          <div id="assumptionDetailBox" class="assumption-detail-box hidden">
+            <div class="detail-header">
+              <span class="detail-badge" id="detailBadge">CRITICAL DEFEATER NODE</span>
+              <button id="closeDetailBtn" class="btn-icon-close" aria-label="Close assumption detail">✕</button>
+            </div>
+            <h4 id="detailAssumptionText" class="detail-text">Assumption content...</h4>
+            <div class="falsification-card">
+              <div class="falsification-label">
+                <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Karl Popper Epistemic Falsification Test:
+              </div>
+              <p id="detailFalsificationTest" class="falsification-content">How to prove this wrong before committing...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Multi-Perspective Switcher & Socratic Inquiry Section -->
+        <div class="perspectives-section glass-card">
+          <div class="section-title-bar">
+            <div>
+              <h3 class="section-title">Stakeholder Perspective Switcher</h3>
+              <p class="section-subtitle">Examine your decision through four distinct cognitive lenses to escape tunnel vision.</p>
+            </div>
+          </div>
+
+          <!-- Tab Selection Header -->
+          <div class="perspective-tabs" role="tablist" aria-label="Stakeholder Perspectives">
+            <button class="tab-btn active" role="tab" aria-selected="true" data-lens="skeptic">
+              <span class="tab-icon">🥊</span>
+              <span class="tab-label">The Skeptic</span>
+            </button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-lens="stakeholder">
+              <span class="tab-icon">👥</span>
+              <span class="tab-label">Impacted Other</span>
+            </button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-lens="future_self">
+              <span class="tab-icon">⏳</span>
+              <span class="tab-label">5-Year Self</span>
+            </button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-lens="optimist">
+              <span class="tab-icon">🚀</span>
+              <span class="tab-label">The Optimist</span>
+            </button>
+          </div>
+
+          <!-- Tab Viewport Content Container -->
+          <div id="perspectiveContentCard" class="perspective-viewport">
+            <!-- Dynamically populated viewpoint + probing question -->
+          </div>
+        </div>
+
+        <!-- Socratic Questioning & Reflection Section -->
+        <div class="socratic-deck-section glass-card">
+          <div class="section-title-bar">
+            <div>
+              <h3 class="section-title">Socratic Inquiry Cards</h3>
+              <p class="section-subtitle">Reflective questions designed to stress-test specific detected vulnerabilities.</p>
+            </div>
+          </div>
+
+          <div id="socraticDeckGrid" class="socratic-grid">
+            <!-- Dynamically rendered Socratic questions -->
+          </div>
+        </div>
+
+        <!-- Live Interactive Socratic Dialogue Section (Chat with Model) -->
+        <div class="socratic-chat-section glass-card" id="socraticChatSection">
+          <div class="section-title-bar">
+            <div class="chat-title-group">
+              <div class="live-dot-pulse" aria-hidden="true"></div>
+              <div>
+                <h3 class="section-title">Live Socratic Dialogue with Thinking Companion</h3>
+                <p class="section-subtitle">Ask anything or challenge the model. Ask why it flagged a bias, test counter-scenarios, or explore specific blind spots.</p>
+              </div>
+            </div>
+            <div class="chat-header-actions">
+              <button type="button" id="clearChatBtn" class="btn-ghost" title="Clear conversation thread">
+                <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <!-- Interactive Quick-Prompt Suggestion Chips -->
+          <div class="chat-suggestion-chips" id="chatSuggestionChips">
+            <button type="button" class="chip-prompt" data-prompt="Why do you think I might be suffering from overconfidence bias in this scenario?">"Why do you think I am overconfident?"</button>
+            <button type="button" class="chip-prompt" data-prompt="What would a ruthless, skeptical investor or competitor say is the fatal flaw in my reasoning?">"What would a harsh skeptic say?"</button>
+            <button type="button" class="chip-prompt" data-prompt="How can I design a small, low-risk 7-day experiment to test my most critical assumption before deciding?">"Design a 7-day test for assumption #1"</button>
+            <button type="button" class="chip-prompt" data-prompt="What second-order consequences or hidden emotional drivers might I be confusing with rational logic?">"What hidden emotional drivers am I missing?"</button>
+          </div>
+
+          <!-- Chat Messages Stream / Scroll Container -->
+          <div class="chat-messages-container" id="chatMessagesContainer" role="log" aria-live="polite">
+            <div class="chat-bubble bubble-companion">
+              <div class="bubble-header">
+                <span class="bubble-sender">THINKING COMPANION (SOCRATIC)</span>
+                <span class="bubble-time">Now</span>
+              </div>
+              <div class="bubble-body">
+                I have mapped your assumptions and cognitive blind spots above. What aspect of this decision would you like to probe deeper? You can question my feedback, explore edge cases, or ask how to de-risk this step-by-step.
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat Input Form -->
+          <form id="chatForm" class="chat-input-form" onsubmit="return false;">
+            <div class="chat-input-wrapper">
+              <textarea 
+                id="chatInput" 
+                class="chat-textarea" 
+                rows="1" 
+                placeholder="Ask the model anything or challenge its analysis... (Press Enter to send)"
+                required
+              ></textarea>
+              <button type="submit" id="sendChatBtn" class="btn-send-chat" aria-label="Send message to model">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-sm">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </div>
+            <div class="chat-disclaimer-subtext">
+              <span>Companion strictly maintains Socratic neutrality and autonomy-by-design. It will challenge your thinking, never tell you what to choose.</span>
+            </div>
+          </form>
+        </div>
+
+        <!-- Final Decision Capture & Autonomy Conclusion Drawer -->
+        <div class="decision-capture-card glass-card">
+          <div class="capture-header">
+            <div class="capture-badge">THE FINAL VERDICT IS YOURS</div>
+            <h3 class="capture-title">Record Your Reflection & Decision</h3>
+            <p class="capture-desc">
+              Having examined your blind spots, assumptions, and stakeholder lenses: what is your informed decision?
+            </p>
+          </div>
+
+          <form id="recordDecisionForm" class="record-decision-form" onsubmit="return false;">
+            <div class="form-group">
+              <label for="userFinalDecisionText" class="form-label">Your Conclusion (Your Call)</label>
+              <textarea 
+                id="userFinalDecisionText" 
+                class="form-textarea" 
+                rows="3" 
+                placeholder="State your choice clearly (e.g., 'I will stay at my VP job for 90 more days while validating 3 paid client LOIs first...')"
+                required
+              ></textarea>
+            </div>
+
+            <div class="capture-meta-row">
+              <div class="meta-field">
+                <label for="postConfidenceSlider" class="form-label">Informed Post-Reflection Conviction</label>
+                <div class="post-conf-wrap">
+                  <input type="range" id="postConfidenceSlider" min="1" max="10" value="7" class="range-slider">
+                  <span id="postConfidenceValue" class="slider-value-display">7 / 10</span>
+                </div>
+              </div>
+
+              <div class="meta-field">
+                <label for="keyTakeawayText" class="form-label">Single Biggest Realization</label>
+                <input type="text" id="keyTakeawayText" class="form-input" placeholder="e.g., I was mistaking Twitter likes for validated willingness to pay">
+              </div>
+            </div>
+
+            <div class="capture-actions">
+              <button type="submit" id="saveDecisionBtn" class="btn-primary">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                Record Decision to Journal
+              </button>
+
+              <button type="button" id="exportBriefBtn" class="btn-ghost">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Export Executive Debrief (PDF/Print)
+              </button>
+
+              <button type="button" id="feedbackModalTrigger" class="btn-ghost" title="Rate this analysis">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                Feedback & Accountability
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </section>
+  </main>
+  </div> <!-- /workbenchView -->
+
+  <!-- ==================== VIEW 2: LIVE ANALYSIS ==================== -->
+  <div id="analysisView" class="page-view hidden">
+    <div class="view-container">
+      <div class="page-header" style="margin-bottom: 2.5rem;">
+        <div class="banner-tag" style="margin-bottom: 0.75rem; display: inline-block;">ADVERSARIAL SOCRATIC ENGINE</div>
+        <h2 class="page-title" style="font-size: 2.25rem;">Live Dilemma Analysis</h2>
+        <p class="page-description">
+          Test your high-stakes dilemmas against multi-stakeholder adversarial lenses, surface hidden defeater assumptions, and execute Popperian falsification tests.
+        </p>
+      </div>
+
+      <!-- Preset Scenarios Selector -->
+      <div class="glass-card" style="padding: 1.75rem; margin-bottom: 2rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.85rem;">
+          Explore Real-World Strategic Dilemmas:
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+          <button type="button" class="btn-ghost preset-card-btn" data-scenario="saas" style="text-align: left; padding: 1.15rem; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--bg-surface-elevated);">
+            <div style="font-weight: 700; color: var(--color-cyan); margin-bottom: 0.35rem; font-size: 0.95rem;">🚀 SaaS Career Pivot</div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">Resigning VP role to bootstrap AI micro-SaaS with $85k savings and Twitter validation.</div>
+          </button>
+          <button type="button" class="btn-ghost preset-card-btn" data-scenario="venture" style="text-align: left; padding: 1.15rem; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--bg-surface-elevated);">
+            <div style="font-weight: 700; color: #A855F7; margin-bottom: 0.35rem; font-size: 0.95rem;">💸 Seed Round Dilution</div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">Taking a $2M institutional VC term sheet at 25% dilution vs. staying bootstrapped.</div>
+          </button>
+          <button type="button" class="btn-ghost preset-card-btn" data-scenario="relocation" style="text-align: left; padding: 1.15rem; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--bg-surface-elevated);">
+            <div style="font-weight: 700; color: #10B981; margin-bottom: 0.35rem; font-size: 0.95rem;">🌍 Executive Relocation</div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">Relocating family across continents for early-stage startup executive equity.</div>
+          </button>
+          <button type="button" class="btn-ghost preset-card-btn" data-scenario="rewrite" style="text-align: left; padding: 1.15rem; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--bg-surface-elevated);">
+            <div style="font-weight: 700; color: #F59E0B; margin-bottom: 0.35rem; font-size: 0.95rem;">⚡ Codebase Architecture Rewrite</div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">Freezing customer features for 6 months to rewrite monolithic backend in Rust.</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Action CTA -->
+      <div class="glass-card" style="padding: 2.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+        <div>
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem;">
+            Ready to Analyze Your Own Dilemma?
+          </h3>
+          <p style="color: var(--text-secondary); font-size: 0.9rem; max-width: 600px;">
+            The Socratic engine maps unstated assumptions, detects cognitive biases, and identifies your critical defeater hypothesis without prescribing advice.
+          </p>
+        </div>
+        <button type="button" class="btn-primary" onclick="window.switchView('workbench')" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
+          Go to Workbench →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== VIEW 3: DASHBOARD ==================== -->
+  <div id="dashboardView" class="page-view hidden">
+    <div class="view-container">
+      <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.5rem;">
+        <div>
+          <div class="banner-tag" style="margin-bottom: 0.75rem; display: inline-block;">LONGITUDINAL CALIBRATION</div>
+          <h2 class="page-title" style="font-size: 2.25rem;">Cognitive Calibration Dashboard</h2>
+          <p class="page-description">
+            Track your cognitive bias detection rates, epistemic overconfidence adjustments, and decision outcomes over time.
+          </p>
+        </div>
+        <button type="button" class="btn-primary" onclick="window.switchView('workbench')" style="padding: 0.65rem 1.25rem;">
+          + Frame New Decision
+        </button>
+      </div>
+
+      <!-- Stat Tiles -->
+      <div class="stat-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
+        <div class="glass-card stat-card" style="padding: 1.5rem;">
+          <span class="stat-label" style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">DECISIONS ANALYZED</span>
+          <div id="dashTotalDecisions" class="stat-value" style="font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin: 0.25rem 0;">0</div>
+          <span class="stat-subtext" style="font-size: 0.8rem; color: var(--text-secondary);">Across career, strategy, & venture</span>
+        </div>
+
+        <div class="glass-card stat-card" style="padding: 1.5rem;">
+          <span class="stat-label" style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">AVG BLIND SPOT VULNERABILITY</span>
+          <div id="dashAvgBlindSpot" class="stat-value" style="font-size: 2.5rem; font-weight: 800; color: var(--color-moderate); margin: 0.25rem 0;">6.8 / 10</div>
+          <span class="stat-subtext" style="font-size: 0.8rem; color: var(--text-secondary);">Based on unstated assumptions & biases</span>
+        </div>
+
+        <div class="glass-card stat-card" style="padding: 1.5rem;">
+          <span class="stat-label" style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">CONFIDENCE DEFLATION DELTA</span>
+          <div id="dashAvgDeflation" class="stat-value" style="font-size: 2.5rem; font-weight: 800; color: var(--color-cyan); margin: 0.25rem 0;">-2.4 pts</div>
+          <span class="stat-subtext" style="font-size: 0.8rem; color: var(--text-secondary);">Average epistemic humility correction</span>
+        </div>
+
+        <div class="glass-card stat-card" style="padding: 1.5rem;">
+          <span class="stat-label" style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">DEBIASED ACCURACY</span>
+          <div class="stat-value" style="font-size: 2.5rem; font-weight: 800; color: var(--color-low); margin: 0.25rem 0;">94%</div>
+          <span class="stat-subtext" style="font-size: 0.8rem; color: var(--text-secondary);">Decisions with Popperian tests set</span>
+        </div>
+      </div>
+
+      <!-- Dashboard Visual Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.75rem; margin-bottom: 2.5rem;">
+        
+        <!-- Detected Biases Card -->
+        <div class="glass-card" style="padding: 2rem;">
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">
+            Prevalent Cognitive Vulnerabilities
+          </h3>
+          <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1.5rem;">
+            Distribution of identified cognitive blind spots across recent deliberations.
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 0.35rem;">
+                <span style="font-weight: 600; color: var(--text-primary);">Overconfidence Bias (Epistemic Gap)</span>
+                <span style="color: #F87171; font-weight: 700;">42%</span>
+              </div>
+              <div style="background: rgba(255,255,255,0.06); height: 8px; border-radius: 4px; overflow: hidden;">
+                <div style="background: linear-gradient(90deg, #F87171, #EF4444); width: 42%; height: 100%;"></div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 0.35rem;">
+                <span style="font-weight: 600; color: var(--text-primary);">Sunk Cost Fallacy (Prior Investment)</span>
+                <span style="color: #F59E0B; font-weight: 700;">28%</span>
+              </div>
+              <div style="background: rgba(255,255,255,0.06); height: 8px; border-radius: 4px; overflow: hidden;">
+                <div style="background: linear-gradient(90deg, #FBBF24, #F59E0B); width: 28%; height: 100%;"></div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 0.35rem;">
+                <span style="font-weight: 600; color: var(--text-primary);">Survivorship Bias (Polite Validation)</span>
+                <span style="color: #06B6D4; font-weight: 700;">18%</span>
+              </div>
+              <div style="background: rgba(255,255,255,0.06); height: 8px; border-radius: 4px; overflow: hidden;">
+                <div style="background: linear-gradient(90deg, #38BDF8, #06B6D4); width: 18%; height: 100%;"></div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 0.35rem;">
+                <span style="font-weight: 600; color: var(--text-primary);">Status Quo Anchoring</span>
+                <span style="color: #A855F7; font-weight: 700;">12%</span>
+              </div>
+              <div style="background: rgba(255,255,255,0.06); height: 8px; border-radius: 4px; overflow: hidden;">
+                <div style="background: linear-gradient(90deg, #C084FC, #A855F7); width: 12%; height: 100%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Longitudinal Epistemic Humility Curve -->
+        <div class="glass-card" style="padding: 2rem;">
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">
+            Confidence vs. Reality Calibration
+          </h3>
+          <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1.5rem;">
+            Tracking initial stated confidence vs. calibrated post-reflection confidence.
+          </p>
+
+          <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: rgba(255,255,255,0.02); border-radius: var(--radius-sm);">
+              <div>
+                <strong style="color: var(--text-primary); font-size: 0.95rem;">Typical Initial Stated Confidence:</strong>
+                <div style="color: var(--text-muted); font-size: 0.8rem;">Before adversarial Socratic inquiry</div>
+              </div>
+              <span style="font-size: 1.4rem; font-weight: 800; color: #F87171;">8.9 / 10</span>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: rgba(255,255,255,0.02); border-radius: var(--radius-sm);">
+              <div>
+                <strong style="color: var(--text-primary); font-size: 0.95rem;">Calibrated Post-Reflection Confidence:</strong>
+                <div style="color: var(--text-muted); font-size: 0.8rem;">After Popperian defeater testing</div>
+              </div>
+              <span style="font-size: 1.4rem; font-weight: 800; color: #10B981;">6.5 / 10</span>
+            </div>
+
+            <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; border-top: 1px solid var(--border-subtle); padding-top: 0.75rem; margin-top: 0.5rem;">
+              💡 <em>A downward calibration delta is healthy:</em> It indicates you are recognizing unseen tail risks and executing falsification tests before irreversible commitments.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Recent Decisions Table -->
+      <div class="glass-card" style="padding: 2rem;">
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">
+          Recent Recorded Decisions
+        </h3>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1.5rem;">
+          Historical decisions synced locally and backed by cryptographic cloud security.
+        </p>
+        <div id="dashDecisionsList" style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== VIEW 4: JOURNAL / HISTORY ==================== -->
+  <div id="journalView" class="page-view hidden">
+    <div class="view-container">
+      <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.5rem;">
+        <div>
+          <div class="banner-tag" style="margin-bottom: 0.75rem; display: inline-block;">DECISION LOG & REFLECTION VAULT</div>
+          <h2 class="page-title" style="font-size: 2.25rem;">Decision Journal</h2>
+          <p class="page-description">
+            Your longitudinal archive of deliberations, critical defeater tests, and calibrated final verdicts.
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <button type="button" id="journalExportBtn" class="btn-ghost" style="padding: 0.65rem 1.15rem;">
+            📥 Export JSON
+          </button>
+          <button type="button" id="journalPurgeBtn" class="btn-danger-ghost" style="padding: 0.65rem 1.15rem;">
+            🗑️ Wipe All Records
+          </button>
+        </div>
+      </div>
+
+      <!-- Search & Filter Bar -->
+      <div class="glass-card" style="padding: 1.25rem 1.75rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div style="flex: 1; min-width: 280px;">
+          <input 
+            type="text" 
+            id="journalSearchInput" 
+            class="form-input" 
+            placeholder="Search past decisions, tags, or takeaways..."
+            style="width: 100%;"
+          >
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+          <span class="pill-dot"></span>
+          <span>Supabase Cloud Sync: <strong>Connected</strong></span>
+        </div>
+      </div>
+
+      <!-- Journal List Container -->
+      <div id="journalListContainer" style="display: flex; flex-direction: column; gap: 1rem;">
+        <!-- Dynamically rendered -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== VIEW 5: METHODOLOGY / ABOUT ==================== -->
+  <div id="methodologyView" class="page-view hidden">
+    <div class="view-container" style="max-width: 900px;">
+      <div class="page-header" style="margin-bottom: 3rem;">
+        <div class="banner-tag" style="margin-bottom: 0.75rem; display: inline-block;">PHILOSOPHY & ETHICS</div>
+        <h2 class="page-title" style="font-size: 2.25rem;">The Epistemic Mirror</h2>
+        <p class="page-description">
+          Why we built Blind Spot as an adversarial thinking companion rather than an answer-generating oracle.
+        </p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 2.5rem;">
+        <!-- Section 1 -->
+        <section class="glass-card" style="padding: 2.25rem;">
+          <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin-bottom: 1rem;">
+            1. The Problem with Prescriptive AI
+          </h3>
+          <p style="color: var(--text-secondary); line-height: 1.75; margin-bottom: 1rem;">
+            Current generative AI models are trained via RLHF to be sycophantic, agreeable, and directive. When users ask high-stakes questions—such as whether to resign, accept venture funding, or relocate—traditional LLMs default to persuasive summaries that recommend actions.
+          </p>
+          <p style="color: var(--text-secondary); line-height: 1.75;">
+            This creates <strong>autonomy erosion</strong>: individuals outsource existential agency to statistical models that lack skin in the game. When AI gives advice, personal accountability evaporates.
+          </p>
+        </section>
+
+        <!-- Section 2 -->
+        <section class="glass-card" style="padding: 2.25rem; border-left: 4px solid #10B981;">
+          <h3 style="font-size: 1.4rem; font-weight: 800; color: #34D399; margin-bottom: 1rem;">
+            2. The Autonomy-by-Design Charter
+          </h3>
+          <ul style="padding-left: 1.25rem; color: var(--text-secondary); line-height: 1.85;">
+            <li><strong>Zero Directive Imperatives:</strong> Blind Spot is strictly prohibited from uttering &quot;you should&quot;, &quot;you must&quot;, or &quot;the optimal choice is&quot;.</li>
+            <li><strong>Epistemic Separation:</strong> The AI rigorously separates verified facts from inferred optimistic assumptions.</li>
+            <li><strong>Sovereign Human Conclusion:</strong> Only you formulate and record the final decision. The tool is an amplifier for human discernment, not its replacement.</li>
+          </ul>
+        </section>
+
+        <!-- Section 3 -->
+        <section class="glass-card" style="padding: 2.25rem;">
+          <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin-bottom: 1rem;">
+            3. Karl Popper & Epistemic Falsification
+          </h3>
+          <p style="color: var(--text-secondary); line-height: 1.75; margin-bottom: 1rem;">
+            Philosopher of science Karl Popper established that a theory can never be conclusively verified by accumulating supporting evidence; it can only be tested by attempting to falsify it.
+          </p>
+          <p style="color: var(--text-secondary); line-height: 1.75;">
+            In high-stakes strategy, founders and leaders often gather dozens of polite compliments to &quot;prove&quot; demand. Blind Spot inverts this: it identifies your <strong>Critical Defeater Assumption</strong> and helps you formulate a fast, low-cost Popperian experiment to test whether your premise is false <em>before</em> you risk your savings or career.
+          </p>
+        </section>
+
+        <!-- Section 4 -->
+        <section class="glass-card" style="padding: 2.25rem; border-left: 4px solid #EF4444;">
+          <h3 style="font-size: 1.4rem; font-weight: 800; color: #F87171; margin-bottom: 1rem;">
+            4. Safety & Crisis Intercept Policy
+          </h3>
+          <p style="color: var(--text-secondary); line-height: 1.75;">
+            Blind Spot actively screens for queries involving self-harm, severe psychological crisis, or emergency legal/medical scenarios. In such moments, the Socratic analysis is suspended in favor of verified hotline contacts and emergency resources.
+          </p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== VIEW 6: PRIVACY & DATA SOVEREIGNTY ==================== -->
+  <div id="privacyView" class="page-view hidden">
+    <div class="view-container" style="max-width: 920px;">
+      <div class="page-header" style="margin-bottom: 2.5rem;">
+        <div class="banner-tag" style="margin-bottom: 0.75rem; display: inline-block;">DATA SOVEREIGNTY VAULT</div>
+        <h2 class="page-title" style="font-size: 2.25rem;">Privacy & Data Sovereignty Policy</h2>
+        <p class="page-description">
+          We treat your strategic dilemmas and personal reflections with strict mathematical confidentiality.
+        </p>
+      </div>
+
+      <!-- Sovereignty Metrics -->
+      <div class="stat-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div class="glass-card stat-card" style="padding: 1.25rem;">
+          <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">LOCAL STORAGE VAULT</div>
+          <div id="privacyViewVaultSize" style="font-size: 1.6rem; font-weight: 800; color: #06B6D4; margin: 0.25rem 0;">0.00 KB</div>
+          <div id="privacyViewRecordCount" style="font-size: 0.78rem; color: var(--text-secondary);">0 decisions stored</div>
+        </div>
+        <div class="glass-card stat-card" style="padding: 1.25rem;">
+          <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">MODEL TRAINING</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #10B981; margin: 0.25rem 0;">0% Retained</div>
+          <div style="font-size: 0.78rem; color: var(--text-secondary);">Strict zero-retention guarantee</div>
+        </div>
+        <div class="glass-card stat-card" style="padding: 1.25rem;">
+          <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">RIGHT TO ERASURE</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #A855F7; margin: 0.25rem 0;">GDPR Art. 17</div>
+          <div style="font-size: 0.78rem; color: var(--text-secondary);">Instant client-side obliteration</div>
+        </div>
+        <div class="glass-card stat-card" style="padding: 1.25rem;">
+          <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">CLOUD TRANSPORT</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #3B82F6; margin: 0.25rem 0;">TLS 1.3</div>
+          <div style="font-size: 0.78rem; color: var(--text-secondary);">PostgreSQL Row-Level Security</div>
+        </div>
+      </div>
+
+      <!-- Privacy Body Sections -->
+      <div class="glass-card" style="padding: 2.5rem; display: flex; flex-direction: column; gap: 2rem;">
+        <section>
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
+            1. Local-First Architecture
+          </h3>
+          <p style="color: var(--text-secondary); line-height: 1.75;">
+            Blind Spot is engineered with a local-first philosophy. Your decision statements, context descriptions, confidence scores, and pre-mortem failure simulations are stored directly in your web browser&apos;s <code>localStorage</code> by default.
+          </p>
+        </section>
+
+        <section>
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
+            2. Zero Model Training on User Deliberations
+          </h3>
+          <p style="color: var(--text-secondary); line-height: 1.75;">
+            Your high-stakes proprietary dilemmas, financial numbers, and strategic deliberations are <strong>never used to train, fine-tune, or calibrate public or private artificial intelligence models</strong>. When direct LLM APIs are invoked, they operate strictly under zero-data-retention terms.
+          </p>
+        </section>
+
+        <section>
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
+            3. GDPR Right to Erasure
+          </h3>
+          <p style="color: var(--text-secondary); line-height: 1.75; margin-bottom: 0.75rem;">
+            In full compliance with Article 17 of the EU General Data Protection Regulation (GDPR), you hold total control over your digital footprint. You can delete individual decisions or execute a complete purge of all locally stored records with a single click.
+          </p>
+          <button type="button" class="btn-danger-ghost" onclick="window.switchView('journal')" style="display: inline-block; font-size: 0.85rem; padding: 0.45rem 1rem;">
+            Open Journal & Exercise Right to Erasure
+          </button>
+        </section>
+
+        <section>
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
+            4. Supabase Cloud Security
+          </h3>
+          <p style="color: var(--text-secondary); line-height: 1.75;">
+            When synchronizing decisions to Supabase Cloud, records are transmitted via TLS 1.3 encryption and safeguarded within PostgreSQL utilizing strict Row Level Security (RLS) policies. Only your authenticated session can access your stored deliberations.
+          </p>
+        </section>
+
+        <section>
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
+            5. Contact Information
+          </h3>
+          <p style="color: var(--text-secondary); line-height: 1.75;">
+            For privacy inquiries or cryptographic audits of our client-side storage architecture, contact our compliance team at <code>privacy@blindspot-ai.internal</code>.
+          </p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== VIEW 7: AUTHENTICATION & ACCOUNT ==================== -->
+  <div id="authView" class="page-view hidden">
+    <div class="view-container" style="max-width: 480px; min-height: 75vh; display: flex; flex-direction: column; justify-content: center;">
+      
+      <!-- Session Active Card (Shown if logged in) -->
+      <div id="authSessionActiveCard" class="glass-card hidden" style="padding: 2.5rem; text-align: center;">
+        <div class="brand-icon-wrapper" style="margin: 0 auto 1.25rem; width: 48px; height: 48px; background: rgba(16, 185, 129, 0.15); color: #10B981; border-color: rgba(16, 185, 129, 0.3);">
+          <svg style="width: 24px; height: 24px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.35rem;">
+          Account Connected
+        </h3>
+        <p id="authSessionUserEmail" style="font-size: 0.95rem; color: var(--color-cyan); font-weight: 600; margin-bottom: 1.25rem;">
+          user@example.com
+        </p>
+
+        <div style="padding: 0.85rem; background: var(--bg-surface-elevated); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); margin-bottom: 1.75rem; text-align: left; font-size: 0.85rem; color: var(--text-secondary);">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+            <span class="pill-dot"></span>
+            <strong style="color: var(--text-primary);">Supabase Cloud Synchronization:</strong> Active
+          </div>
+          <div>All decision reflections and pre-mortem simulations are backed up using TLS 1.3 encryption.</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <button type="button" class="btn-primary" onclick="window.switchView('dashboard')" style="padding: 0.75rem;">
+            View Calibration Dashboard →
+          </button>
+          <button type="button" id="authSignOutBtn" class="btn-danger-ghost" style="padding: 0.75rem;">
+            Sign Out of Account
+          </button>
+        </div>
+      </div>
+
+      <!-- Sign In / Sign Up Form Card (Shown if logged out) -->
+      <div id="authFormCard" class="glass-card" style="padding: 2.5rem;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <div class="brand-icon-wrapper" style="margin: 0 auto 1rem; width: 44px; height: 44px;">
+            <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-dasharray="4 2" />
+              <circle cx="12" cy="12" r="4" fill="currentColor" />
+            </svg>
+          </div>
+          <h2 id="authFormTitle" style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.25rem;">
+            Welcome to Blind Spot
+          </h2>
+          <p id="authFormSubtitle" style="font-size: 0.85rem; color: var(--text-secondary);">
+            Sign in to access your Supabase cloud decision vault
+          </p>
+        </div>
+
+        <!-- Auth Mode Switcher -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; background: var(--bg-surface-elevated); padding: 0.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); margin-bottom: 1.5rem;">
+          <button type="button" id="authModeSignInBtn" class="nav-btn active" style="text-align: center; padding: 0.45rem;">
+            Sign In
+          </button>
+          <button type="button" id="authModeSignUpBtn" class="nav-btn" style="text-align: center; padding: 0.45rem;">
+            Create Account
+          </button>
+        </div>
+
+        <!-- Auth Status Banner -->
+        <div id="authStatusBanner" class="hidden" style="padding: 0.75rem; border-radius: var(--radius-md); font-size: 0.85rem; margin-bottom: 1.25rem; text-align: center;"></div>
+
+        <form id="authMainForm">
+          <!-- Full Name (Sign Up only) -->
+          <div id="authNameGroup" class="form-group hidden" style="margin-bottom: 1.25rem;">
+            <label for="authNameInput" class="form-label">Full Name / Alias</label>
+            <input 
+              type="text" 
+              id="authNameInput" 
+              class="form-input" 
+              placeholder="e.g. Alex Mercer"
+              style="width: 100%;"
+            >
+          </div>
+
+          <!-- Email Address -->
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label for="authEmailInput" class="form-label">Email Address</label>
+            <input 
+              type="email" 
+              id="authEmailInput" 
+              class="form-input" 
+              placeholder="founder@venture.com"
+              style="width: 100%;"
+              required
+            >
+          </div>
+
+          <!-- Password -->
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <label for="authPasswordInput" class="form-label" style="margin-bottom: 0;">Password</label>
+              <button type="button" id="authTogglePassword" class="btn-ghost" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">
+                👁️ Show
+              </button>
+            </div>
+            <input 
+              type="password" 
+              id="authPasswordInput" 
+              class="form-input" 
+              placeholder="••••••••••••"
+              style="width: 100%;"
+              required
+            >
+          </div>
+
+          <!-- Charter Agreement (Sign Up only) -->
+          <div id="authCharterGroup" class="form-group hidden" style="margin-bottom: 1.25rem;">
+            <label style="display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.82rem; color: var(--text-secondary); cursor: pointer; line-height: 1.5;">
+              <input type="checkbox" id="authCharterCheckbox" style="margin-top: 0.2rem; accent-color: var(--accent-primary);">
+              <span>I understand Blind Spot is non-prescriptive and will never tell me what I should decide.</span>
+            </label>
+          </div>
+
+          <!-- Submit Button -->
+          <button 
+            type="submit" 
+            id="authSubmitBtn" 
+            class="btn-primary" 
+            style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; font-size: 0.95rem;"
+          >
+            Sign In with Supabase →
+          </button>
+
+          <!-- Guest Mode -->
+          <button 
+            type="button" 
+            id="authGuestModeBtn" 
+            class="btn-ghost" 
+            style="width: 100%; padding: 0.75rem; justify-content: center; font-size: 0.88rem;"
+          >
+            Continue as Sovereign Guest (Local Offline Only)
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Global App Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>
+        <div style="display: flex; align-items: center; gap: 0.65rem;">
+          <div class="brand-icon-wrapper" style="width: 32px; height: 32px;">
+            <svg class="brand-icon" style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-dasharray="4 2" />
+              <circle cx="12" cy="12" r="4" fill="currentColor" />
+            </svg>
+          </div>
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--text-primary);">BLIND SPOT</span>
+        </div>
+        <p class="footer-brand-desc">
+          An autonomy-by-design thinking companion that surfaces hidden assumptions and cognitive biases without ever telling you what to do.
+        </p>
+        <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <span class="autonomy-pill" style="font-size: 0.72rem; padding: 0.25rem 0.6rem;">Non-Prescriptive</span>
+          <span class="autonomy-pill supabase-pill" style="font-size: 0.72rem; padding: 0.25rem 0.6rem;">Local-First Vault</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Navigation</div>
+        <ul class="footer-links">
+          <li><button type="button" class="footer-link-btn" onclick="window.switchView('workbench')">Decision Workbench</button></li>
+          <li><button type="button" class="footer-link-btn" onclick="window.switchView('analysis')">Live Analysis</button></li>
+          <li><button type="button" class="footer-link-btn" onclick="window.switchView('dashboard')">Calibration Dashboard</button></li>
+          <li><button type="button" class="footer-link-btn" onclick="window.switchView('journal')">Decision Journal</button></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Philosophy</div>
+        <ul class="footer-links">
+          <li><button type="button" class="footer-link-btn" onclick="window.switchView('methodology')">The Epistemic Mirror</button></li>
+          <li><button type="button" class="footer-link-btn" onclick="window.switchView('methodology')">Autonomy Charter</button></li>
+          <li><button type="button" class="footer-link-btn" onclick="window.switchView('methodology')">Popperian Falsification</button></li>
+          <li><button type="button" class="footer-link-btn" onclick="window.switchView('methodology')">Crisis Intercept</button></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Data Sovereignty</div>
+        <ul class="footer-links">
+          <li><button type="button" class="footer-link-btn" onclick="window.switchView('privacy')">Privacy Policy</button></li>
+          <li><button type="button" class="footer-link-btn" onclick="window.switchView('privacy')">GDPR Right to Erasure</button></li>
+          <li><button type="button" class="footer-link-btn" onclick="window.switchView('privacy')">Zero-Training Guarantee</button></li>
+          <li><button type="button" class="footer-link-btn" onclick="window.switchView('privacy')">Cryptographic Audits</button></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2026 Blind Spot. Engineered with Autonomy-by-Design principles.</div>
+      <div>Zero model training on user data guaranteed.</div>
+    </div>
+  </footer>
+
+  <!-- MODAL: "What Am I Missing?" Quick Modal -->
+  <dialog id="missingInsightDialog" class="app-dialog glass-card">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <div class="dialog-badge text-amber">
+          <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          CRITICAL UNNOTICED BLIND SPOT
+        </div>
+        <button id="closeMissingModalBtn" class="btn-icon-close" aria-label="Close dialog">✕</button>
+      </div>
+
+      <div class="missing-modal-body">
+        <h3 id="missingCoreTitle" class="missing-title">Willingness to Pay vs. Polite Interest</h3>
+        <p id="missingExplanation" class="missing-explanation">
+          You are treating positive comments and casual interest as market validation. No one has committed money or signed a binding letter of intent.
+        </p>
+
+        <div class="missing-question-box">
+          <span class="question-callout-tag">LEVERAGE SOCRATIC QUESTION</span>
+          <p id="missingQuestion" class="missing-question-text">
+            "Before resigning from your role, what prevents you from collecting three $500 pre-orders from prospective customers this weekend?"
+          </p>
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button id="missingActionAcknowledge" class="btn-primary">I Understand, Add to Reflection</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- MODAL: Pre-Mortem Guided Analysis Wizard -->
+  <dialog id="premortemDialog" class="app-dialog glass-card">
+    <div class="dialog-content premortem-modal-content">
+      <div class="dialog-header">
+        <div class="dialog-badge text-rose">
+          <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          PROSPECTIVE HINDSIGHT EXERCISE
+        </div>
+        <button id="closePremortemModalBtn" class="btn-icon-close" aria-label="Close pre-mortem dialog">✕</button>
+      </div>
+
+      <div class="premortem-body">
+        <h3 class="premortem-headline">The 1-Year Failure Simulation</h3>
+        <p class="premortem-intro">
+          Imagine it is exactly <strong>12 months from today</strong>. You made this decision with high confidence, but it has <strong>failed completely and catastrophically</strong>. You ran out of money, burnt out, or faced severe regret.
+        </p>
+
+        <div class="form-group">
+          <label for="premortemFailureReasons" class="form-label">Looking backward from the future: Why did it fail?</label>
+          <textarea 
+            id="premortemFailureReasons" 
+            class="form-textarea" 
+            rows="4" 
+            placeholder="1. We underestimated customer acquisition costs by 3x...&#10;2. My partner became anxious due to unstable cash flow...&#10;3. Competitors launched an identical free feature..."
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="premortemMitigation" class="form-label">What is ONE preemptive action you can execute THIS WEEK to kill that risk?</label>
+          <input 
+            type="text" 
+            id="premortemMitigation" 
+            class="form-input" 
+            placeholder="e.g., Set an ironclad stop-loss limit of $30k; get spousal sign-off in writing"
+          >
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button id="savePremortemBtn" class="btn-primary">Attach Pre-Mortem to Decision</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- MODAL: Feedback & Defeater Mechanism -->
+  <dialog id="feedbackDialog" class="app-dialog glass-card">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <div class="dialog-badge text-cyan">AI ACCOUNTABILITY & AUDIT</div>
+        <button id="closeFeedbackModalBtn" class="btn-icon-close" aria-label="Close feedback dialog">✕</button>
+      </div>
+
+      <div class="feedback-body">
+        <h3 class="feedback-title">Did this analysis preserve your autonomy?</h3>
+        <p class="feedback-desc">We audit all prompts to ensure the AI never tries to decide for you or exhibit bias.</p>
+
+        <div class="rating-choice-row">
+          <button class="choice-pill active" data-rating="helpful">💡 Helped me think deeper</button>
+          <button class="choice-pill" data-rating="neutral">Neutral</button>
+          <button class="choice-pill" data-rating="directive">⚠️ Felt too directive / pushed an answer</button>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Flag any issues (check all that apply):</label>
+          <div class="checkbox-grid">
+            <label class="check-item"><input type="checkbox" name="feedbackIssue" value="tried_to_decide"> Tried to decide for me</label>
+            <label class="check-item"><input type="checkbox" name="feedbackIssue" value="missed_context"> Missed critical context</label>
+            <label class="check-item"><input type="checkbox" name="feedbackIssue" value="inaccurate_facts"> Inaccurate assumptions</label>
+            <label class="check-item"><input type="checkbox" name="feedbackIssue" value="judgmental_tone"> Tone felt judgmental</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="feedbackNotes" class="form-label">Additional notes (optional):</label>
+          <input type="text" id="feedbackNotes" class="form-input" placeholder="What could have improved this thinking session?">
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button id="submitFeedbackBtn" class="btn-primary">Submit Anonymous Feedback</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- MODAL: Decision History / Saved Journal Drawer -->
+  <dialog id="historyDialog" class="app-dialog glass-card">
+    <div class="dialog-content history-dialog-content">
+      <div class="dialog-header">
+        <div class="dialog-badge">DECISION JOURNAL</div>
+        <button id="closeHistoryModalBtn" class="btn-icon-close" aria-label="Close history dialog">✕</button>
+      </div>
+
+      <div class="history-body">
+        <h3 class="history-title">Your Past Decisions & Reflections</h3>
+        <p class="history-desc">Decisions stored securely in local browser storage. You can delete individual records or wipe everything.</p>
+
+        <div id="historyListContainer" class="history-list">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <div class="dialog-actions history-footer">
+        <button id="wipeAllDataBtn" class="btn-danger-ghost">
+          <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          Wipe All Local Data (GDPR Right to Erasure)
+        </button>
+        <button id="closeHistoryBottomBtn" class="btn-ghost">Close</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- MODAL: High-Stakes / Crisis Intercept Modal -->
+  <dialog id="crisisDialog" class="app-dialog glass-card">
+    <div class="dialog-content crisis-modal-content">
+      <div class="dialog-header">
+        <div class="dialog-badge text-rose">⚠️ SENSITIVE / CRISIS INTERCEPT</div>
+        <button id="closeCrisisBtn" class="btn-icon-close" aria-label="Close warning dialog">✕</button>
+      </div>
+
+      <div class="crisis-body">
+        <h3 class="crisis-title">This App Does Not Replace Professional Guidance</h3>
+        <p class="crisis-text">
+          Your input contains keywords associated with high-stakes health, legal, clinical, or crisis decisions. <strong>Blind Spot is purely a cognitive thinking exercise and cannot provide clinical, financial, or legal counsel.</strong>
+        </p>
+
+        <div class="helpline-card">
+          <div class="helpline-item">
+            <strong>Mental Health & Crisis Hotline:</strong> Dial or text <strong>988</strong> (USA/Canada) or reach out to local emergency services.
+          </div>
+          <div class="helpline-item">
+            <strong>Legal / Financial Decisions:</strong> Please consult a certified attorney or fiduciary financial advisor before making irreversible commitments.
+          </div>
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button id="crisisAcknowledgeBtn" class="btn-primary">I Understand, Proceed with Reflection</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- MODAL: AI Model & Inference Settings Dialog -->
+  <dialog id="apiSettingsDialog" class="app-dialog glass-card">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <div class="dialog-badge text-cyan">AI MODEL & INFERENCE SETTINGS</div>
+        <button id="closeApiSettingsBtn" class="btn-icon-close" aria-label="Close settings dialog">✕</button>
+      </div>
+
+      <div class="settings-body">
+        <p class="settings-desc">
+          Blind Spot runs with an <strong>intelligent zero-setup Socratic engine</strong> by default. If you prefer to connect your own direct LLM API key (OpenAI GPT-4o, Google Gemini, or Claude), you can configure it below. Keys are stored locally in your browser only.
+        </p>
+
+        <div class="form-group">
+          <label for="aiProviderSelect" class="form-label">Active Inference Engine</label>
+          <select id="aiProviderSelect" class="preset-select">
+            <option value="builtin" selected>⚡ Built-in Intelligent Socratic Engine (Zero-Setup, Free)</option>
+            <option value="openai">OpenAI (GPT-4o / GPT-4o-mini)</option>
+            <option value="gemini">Google Gemini (Gemini 1.5 Flash / Pro)</option>
+            <option value="anthropic">Anthropic (Claude 3.5 Sonnet)</option>
+          </select>
+        </div>
+
+        <div id="apiKeyGroup" class="form-group hidden">
+          <label for="apiKeyInput" class="form-label">Provider API Key</label>
+          <div class="input-with-action">
+            <input 
+              type="password" 
+              id="apiKeyInput" 
+              class="form-input" 
+              placeholder="sk-... or AIzaSy..."
+            >
+            <button type="button" id="toggleApiKeyVisibility" class="btn-ghost" title="Toggle visibility" style="padding: 0.45rem 0.65rem;">👁️</button>
+          </div>
+          <span class="input-hint">Your API key is stored strictly in your browser's localStorage and only sent directly to the official model provider API.</span>
+        </div>
+
+        <div id="modelSelectGroup" class="form-group hidden">
+          <label for="modelNameInput" class="form-label">Model Identifier</label>
+          <input type="text" id="modelNameInput" class="form-input" value="gpt-4o">
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button id="saveApiSettingsBtn" class="btn-primary">Save Configuration</button>
+      </div>
+    </div>
+  <!-- MODAL: Data Privacy & Sovereignty Dialog -->
+  <dialog id="privacyDialog" class="app-dialog glass-card" style="max-width: 820px; width: 92vw;">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <div class="dialog-badge" style="color: #10B981; border-color: rgba(16, 185, 129, 0.3);">SOVEREIGNTY-BY-DESIGN VAULT</div>
+        <button id="closePrivacyDialogBtn" class="btn-icon-close" aria-label="Close privacy dialog">✕</button>
+      </div>
+
+      <div class="privacy-body" style="padding: 1.25rem 0; display: flex; flex-direction: column; gap: 1.5rem;">
+        <div>
+          <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.35rem;">
+            Privacy & Data Sovereignty
+          </h3>
+          <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">
+            Blind Spot operates local-first. Your deliberations, cognitive scores, and pre-mortem scenarios remain under your exclusive ownership in client-side storage.
+          </p>
+        </div>
+
+        <!-- Metric Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.85rem;">
+          <div style="background: var(--bg-surface-elevated); padding: 0.85rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Local Storage</div>
+            <div id="privacyVaultSize" style="font-size: 1.3rem; font-weight: 800; color: #06B6D4; margin: 0.25rem 0;">0.00 KB</div>
+            <div id="privacyRecordCount" style="font-size: 0.75rem; color: var(--text-secondary);">0 decisions stored</div>
+          </div>
+          <div style="background: var(--bg-surface-elevated); padding: 0.85rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Model Training</div>
+            <div style="font-size: 1.3rem; font-weight: 800; color: #10B981; margin: 0.25rem 0;">0% Retained</div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary);">Zero-retention API contract</div>
+          </div>
+          <div style="background: var(--bg-surface-elevated); padding: 0.85rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Right to Erasure</div>
+            <div style="font-size: 1.3rem; font-weight: 800; color: #A855F7; margin: 0.25rem 0;">GDPR Art. 17</div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary);">Instant client obliteration</div>
+          </div>
+          <div style="background: var(--bg-surface-elevated); padding: 0.85rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Encryption</div>
+            <div style="font-size: 1.3rem; font-weight: 800; color: #3B82F6; margin: 0.25rem 0;">TLS 1.3</div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary);">PostgreSQL RLS Active</div>
+          </div>
+        </div>
+
+        <!-- Sovereignty Action Bar -->
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; background: rgba(255,255,255,0.02); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+          <button id="privacyExportBtn" class="btn-ghost" style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.88rem;">
+            📥 Export All Decisions (JSON)
+          </button>
+          <button id="privacyPurgeBtn" class="btn-danger-ghost" style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.88rem;">
+            🗑️ Wipe All Local Data
+          </button>
+        </div>
+
+        <!-- Core Guarantees -->
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+          <div style="padding: 0.75rem; background: var(--bg-surface-elevated); border-radius: var(--radius-sm); border-left: 3px solid #10B981;">
+            <strong style="color: var(--text-primary);">Zero Model Training:</strong> Your deliberations and proprietary dilemmas are never used to train public or proprietary AI models.
+          </div>
+          <div style="padding: 0.75rem; background: var(--bg-surface-elevated); border-radius: var(--radius-sm); border-left: 3px solid #06B6D4;">
+            <strong style="color: var(--text-primary);">Client-Side Isolation:</strong> The Socratic engine executes in-browser. No database connection is required to evaluate unstated assumptions.
+          </div>
+        </div>
+      </div>
+
+      <div class="dialog-actions" style="justify-content: space-between; align-items: center;">
+        <span style="font-size: 0.8rem; color: var(--text-muted);">Compliance Contact: privacy@blindspot-ai.internal</span>
+        <button id="closePrivacyBottomBtn" class="btn-primary" style="padding: 0.45rem 1.25rem;">Done</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Supabase Client Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Application Logic -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
